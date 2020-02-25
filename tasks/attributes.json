@@ -1,0 +1,19 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "Create csr_attributes.yaml",
+  "parameters": {
+  	"custom_attributes": {
+  	  "description": "JSON object with oid's as key",
+  	  "Type": "Hash"
+  	},
+  	"extension_requests": {
+  	  "description": "JSON object with oid's as key",
+  	  "Type": "Hash"
+  	},
+    "restore": {
+      "description": "Undo default behavior",
+      "type": "Boolean"
+    }
+  }
+}

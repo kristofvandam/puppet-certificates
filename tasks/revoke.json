@@ -1,0 +1,15 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "A short description of this task",
+  "parameters": {
+  	"target": {
+  	  "description": "Target node that needs to be revoked",
+  	  "type": "String"
+  	},
+  	"restore": {
+  		"description": "Undo default behavior",
+  		"type": "Boolean"
+  	}
+  }
+}
