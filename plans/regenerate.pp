@@ -19,7 +19,10 @@ plan certificates::regenerate (
       target => "${target}",
       _catch_errors => true
     )
-    #run_task('certificates::request')
+    run_task('certificates::request', $target,
+      restore => $restore,
+      _catch_errors => true
+    )
     #run_task('certificates::sign')
   }
 
