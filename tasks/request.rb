@@ -1,33 +1,25 @@
 #!/opt/puppetlabs/puppet/bin/ruby
-
 require 'json'
-require 'yaml'
 require 'puppet'
-require 'facter'
-require 'fileutils'
-
-Puppet.initialize_settings
 
 params             = JSON.parse(STDIN.read)
 restore            = params['restore'] || false
 
-ssldir             = Puppet.settings.value(:ssldir)
-fqdn               = Facter.value(:fqdn)
-cert               = "#{ssldir}/certs/#{fqdn}"
-certbck            = "#{cert}.bck"
+output             = {}
 
-case restore
-when false
-  cert_original = File.read(cert) if File.file?(cert)
-	FileUtils.mv(cert, certbck) if File.file?(cert)
-	puts "creating our certificate file"
-	#generate cert
-when true # restore
-	if File.file?(certbck)
-	  puts "restoring certificate"
-	  File.delete(cert) if File.exist?(cert)
-	  FileUtils.mv(certbck, cert)
-	else
-		puts "no backup to restore"
+if not restore
+	Puppet.initialize_settings
+	Puppet::SSL::Oids.register_puppet_oids
+	Puppet.settings.use :main, :agent, :ssl
+	machine = Puppet::SSL::StateMachine.new(waitforcert: 0)
+	begin
+		machine.ensure_client_certificate
+	rescue Exception => e
+		output['status'] = 'changed'
+		output['err'] = "#{e}"
 	end
+else
+	output['status'] = 'no_restore'
 end
+
+puts output.to_json

@@ -5,7 +5,7 @@
   "parameters": {
   	"restore": {
 			"description": "Undo default behavior",
-			"type": "Boolean"
+      "type": "Optional[Boolean]"
   	}
   }
 }

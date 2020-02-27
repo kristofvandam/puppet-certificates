@@ -3,5 +3,13 @@
   "supports_noop": false,
   "description": "Revoke and Sign the new certificate",
   "parameters": {
+    "target": {
+      "description": "Target node that needs to be revoked",
+      "type": "String"
+    },
+    "restore": {
+      "description": "Undo default behavior",
+      "type": "Optional[Boolean]"
+    }
   }
 }

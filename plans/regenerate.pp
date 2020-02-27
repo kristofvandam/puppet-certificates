@@ -8,22 +8,31 @@ plan certificates::regenerate (
 
   # Extract the Target name from $webservers
   get_targets($targets).map |$target| {
-    run_task('certificates::attributes', $target,
-      restore => $restore,
-    	custom_attributes => $custom_attributes, 
-    	extension_requests => $extension_requests,
-    	_catch_errors => true
-    )
-    run_task('certificates::revoke', $master,
-      restore => $restore,
-      target => "${target}",
-      _catch_errors => true
-    )
-    run_task('certificates::request', $target,
-      restore => $restore,
-      _catch_errors => true
-    )
-    #run_task('certificates::sign')
+    $task_attributes = run_task('certificates::attributes', $target,
+      restore            => $restore,
+      custom_attributes  => $custom_attributes,
+      extension_requests => $extension_requests,
+      _catch_errors      => true
+    ).first
+
+    if ($task_attributes['status'] == 'changed') {
+
+      run_task('certificates::revoke', $master,
+        restore       => $restore,
+        target        => "${target}",
+        _catch_errors => true
+      )
+      run_task('certificates::request', $target,
+        restore       => $restore,
+        _catch_errors => true
+      )
+      run_task('certificates::sign', $master,
+        restore       => $restore,
+        target        => "${target}",
+        _catch_errors => true
+      )
+
+    }
   }
 
- }
+}
