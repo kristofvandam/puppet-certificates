@@ -11,7 +11,7 @@ Puppet.initialize_settings
 Puppet::SSL::Oids.register_puppet_oids
 Puppet.settings.use :main, :agent, :ssl
 
-def CertificateRequestPP5
+def certificateRequestPP5()
 	require 'puppet/application/agent'
 
 	Puppet::SSL::Host.ca_location = :remote
@@ -26,7 +26,7 @@ def CertificateRequestPP5
 	end	
 end
 
-def CertificateRequestPP6
+def certificateRequestPP6()
 	machine = Puppet::SSL::StateMachine.new(waitforcert: 0)
 	begin
 		machine.ensure_client_certificate
@@ -37,8 +37,13 @@ def CertificateRequestPP6
 end
 
 if not restore
-	major_version = Puppet.version.split('.', 1)
-	CertificateRequest.const_get("PP#{major_version}")
+	major_version = Puppet.version
+	case major_version
+	  when /^5/
+	  	certificateRequestPP5
+	  when /^6/
+	  	certificateRequestPP6
+	end
 else
 	output['status'] = 'no_restore'
 end

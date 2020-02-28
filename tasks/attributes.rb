@@ -9,7 +9,8 @@ require 'fileutils'
 Puppet.initialize_settings
 
 ssldir             = Puppet.settings.value(:ssldir)
-csrfile            = "#{ssldir}/csr_attributes.yaml"
+confdir            = Puppet.settings.value(:confdir)
+csrfile            = "#{confdir}/csr_attributes.yaml"
 
 ssldirbck          = "#{ssldir}.bck"
 csrfilebck         = "#{csrfile}.bck"
