@@ -8,6 +8,15 @@ plan certificates::regenerate (
 
   # Extract the Target name from $webservers
   get_targets($targets).map |$target| {
+
+    apply($target, _catch_errors => true) {
+      file { '/tmp/ruby':
+        ensure  => file,
+        mode    => '0700',
+        content => template('certificates/ruby_interpreter.sh')
+      }
+    }
+
     $task_attributes = run_task('certificates::attributes', $target,
       restore            => $restore,
       custom_attributes  => $custom_attributes,

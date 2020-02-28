@@ -1,4 +1,5 @@
-#!/opt/puppetlabs/puppet/bin/ruby
+#!/tmp/ruby
+
 require 'json'
 require 'puppet'
 

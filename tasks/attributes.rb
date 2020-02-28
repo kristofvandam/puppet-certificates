@@ -1,4 +1,4 @@
-#!/opt/puppetlabs/puppet/bin/ruby
+#!/tmp/ruby
 
 require 'json'
 require 'yaml'
@@ -52,6 +52,7 @@ when true # restore
 	if File.directory?(ssldirbck)
 	  FileUtils.remove_dir(ssldir) if File.directory?(ssldir)
 	  FileUtils.mv(ssldirbck, ssldir)
+    FileUtils.mv(csrfilebck, csrfile)
     output['status'] = 'restored'
 	else
     output['status'] = 'no_restore'
