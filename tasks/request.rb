@@ -1,4 +1,4 @@
-#!/tmp/ruby
+#!/opt/puppetlabs/puppet/bin/ruby
 
 require 'json'
 require 'puppet'
@@ -15,6 +15,9 @@ Puppet.settings.use :main, :agent, :ssl
 def certificateRequestPP5()
 	require 'puppet/application/agent'
 
+	output['status'] = 'changed'
+	output['err'] = "#{e}"
+	puts output.to_json
 	Puppet::SSL::Host.ca_location = :remote
 	machine = Puppet::Application::Agent.new
 	begin
@@ -22,18 +25,17 @@ def certificateRequestPP5()
 		host = Puppet::SSL::Host.new
 		host.wait_for_cert(0)
 	rescue Exception => e
-		output['status'] = 'changed'
-		output['err'] = "#{e}"
 	end	
 end
 
 def certificateRequestPP6()
+	output['status'] = 'changed'
+	output['err'] = "#{e}"
+	puts output.to_json
 	machine = Puppet::SSL::StateMachine.new(waitforcert: 0)
 	begin
 		machine.ensure_client_certificate
 	rescue Exception => e
-		output['status'] = 'changed'
-		output['err'] = "#{e}"
 	end	
 end
 

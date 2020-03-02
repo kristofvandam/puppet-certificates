@@ -68,7 +68,6 @@ when false
     output['requests']['find'] = JSON.parse(response_find.body.to_s)
   rescue JSON::ParserError => e  
     output['status'] = 'unchanged'
-    exit 0
   end
   output['status']             = 'changed'
   output['message']            = "revoked certificated for #{target}"
